@@ -38,6 +38,9 @@
 
 #define BOARD_INFO_NAME "Protoneer CNC Shield v3.00"
 
+#define SERVO0_PIN                            57
+
+
 //
 // Limit Switches
 //
@@ -70,11 +73,11 @@
 //
 #define TEMP_0_PIN                             8  // Analog Input
 //#define TEMP_1_PIN                           9  // Analog Input
-//#define TEMP_BED_PIN                        10  // Analog Input
+#define TEMP_BED_PIN                        11  // Analog Input
 
 //
 // Heaters / Fans - These could be any digital input not hidden by board
 //
 //#define HEATER_0_PIN                        22  // EXTRUDER 1
 //#define HEATER_1_PIN                        23  // EXTRUDER 2
-//#define HEATER_BED_PIN                      24
+#define HEATER_BED_PIN                      24

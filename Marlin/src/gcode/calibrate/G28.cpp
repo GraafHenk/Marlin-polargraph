@@ -89,7 +89,8 @@
       };
     #endif
 
-    do_blocking_move_to_xy(1.5 * max_length(X_AXIS) * x_axis_home_dir, 1.5 * max_length(Y_AXIS) * Y_HOME_DIR, fr_mm_s);
+    // do_blocking_move_to_xy(1.5 * max_length(X_AXIS) * x_axis_home_dir, 1.5 * max_length(Y_AXIS) * Y_HOME_DIR, fr_mm_s);
+    do_blocking_move_to_xy(1 , 1.5 * max_length(Y_AXIS) * Y_HOME_DIR, fr_mm_s);
 
     endstops.validate_homing_move();
 
@@ -439,6 +440,7 @@ void GcodeSuite::G28() {
       // Diagonal move first if both are homing
       TERN_(QUICK_HOME, if (doX && doY) quick_home_xy());
 
+
       #if HAS_Y_AXIS
         // Home Y (before X)
         if (ENABLED(HOME_Y_BEFORE_X) && (doY || TERN0(CODEPENDENT_XY_HOMING, doX)))
@@ -536,7 +538,7 @@ void GcodeSuite::G28() {
     /**
      * Preserve DXC mode across a G28 for IDEX printers in DXC_DUPLICATION_MODE.
      * This is important because it lets a user use the LCD Panel to set an IDEX Duplication mode, and
-     * then print a standard G-Code file that contains a single print that does a G28 and has no other
+     * then print a standard GCode file that contains a single print that does a G28 and has no other
      * IDEX specific commands in it.
      */
     #if ENABLED(DUAL_X_CARRIAGE)

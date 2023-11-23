@@ -4205,14 +4205,12 @@ void Temperature::isr() {
         case H_REDUNDANT: k = 'R'; break;
       #endif
     }
-    #ifndef HEATER_STATE_FLOAT_PRECISION
-      #define HEATER_STATE_FLOAT_PRECISION _MIN(SERIAL_FLOAT_PRECISION, 2)
-    #endif
+    #define SFP _MIN(SERIAL_FLOAT_PRECISION, 2)
 
     SString<50> s(' ', k);
     if (TERN0(HAS_MULTI_HOTEND, e >= 0)) s += char('0' + e);
-    s += ':'; s += p_float_t(c, HEATER_STATE_FLOAT_PRECISION);
-    if (show_t) { s += F(" /"); s += p_float_t(t, HEATER_STATE_FLOAT_PRECISION); }
+    s += ':'; s += p_float_t(c, SFP);
+    if (show_t) { s += F(" /"); s += p_float_t(t, SFP); }
     #if ENABLED(SHOW_TEMP_ADC_VALUES)
       // Temperature MAX SPI boards do not have an OVERSAMPLENR defined
       s.append(F(" ("), TERN(HAS_MAXTC_LIBRARIES, k == 'T', false) ? r : r * RECIPROCAL(OVERSAMPLENR), ')');

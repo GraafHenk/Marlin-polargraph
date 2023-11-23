@@ -219,13 +219,15 @@ void PrintJobRecovery::save(const bool force/*=false*/, const float zraise/*=POW
       #endif
     #endif
 
-    #if HAS_HOTEND
+    #if HAS_EXTRUDERS
       HOTEND_LOOP() info.target_temperature[e] = thermalManager.degTargetHotend(e);
     #endif
 
     TERN_(HAS_HEATED_BED, info.target_temperature_bed = thermalManager.degTargetBed());
 
-    TERN_(HAS_FAN, COPY(info.fan_speed, thermalManager.fan_speed));
+    #if HAS_FAN
+      COPY(info.fan_speed, thermalManager.fan_speed);
+    #endif
 
     #if HAS_LEVELING
       info.flag.leveling = planner.leveling_active;
@@ -581,10 +583,9 @@ void PrintJobRecovery::resume() {
         DEBUG_ECHOLNPGM("zraise: ", info.zraise, " ", info.flag.raised ? "(before)" : "");
 
         #if ENABLED(GCODE_REPEAT_MARKERS)
-          const uint8_t ind = info.stored_repeat.count();
-          DEBUG_ECHOLNPGM("repeat markers: ", ind);
-          for (uint8_t i = ind; i--;)
-            DEBUG_ECHOLNPGM("...", i, " sdpos: ", info.stored_repeat.get_marker_sdpos(i), " count: ", info.stored_repeat.get_marker_counter(i));
+          DEBUG_ECHOLNPGM("repeat index: ", info.stored_repeat.index);
+          for (uint8_t i = 0; i < info.stored_repeat.index; ++i)
+            DEBUG_ECHOLNPGM("..... sdpos: ", info.stored_repeat.marker.sdpos, " count: ", info.stored_repeat.marker.counter);
         #endif
 
         #if HAS_HOME_OFFSET
@@ -671,9 +672,7 @@ void PrintJobRecovery::resume() {
 
         DEBUG_ECHOLNPGM("flag.dryrun: ", AS_DIGIT(info.flag.dryrun));
         DEBUG_ECHOLNPGM("flag.allow_cold_extrusion: ", AS_DIGIT(info.flag.allow_cold_extrusion));
-        #if DISABLED(NO_VOLUMETRICS)
-          DEBUG_ECHOLNPGM("flag.volumetric_enabled: ", AS_DIGIT(info.flag.volumetric_enabled));
-        #endif
+        DEBUG_ECHOLNPGM("flag.volumetric_enabled: ", AS_DIGIT(info.flag.volumetric_enabled));
       }
       else
         DEBUG_ECHOLNPGM("INVALID DATA");

@@ -57,8 +57,7 @@
  *               41 - Counter-Clockwise M4
  *               50 - Clockwise M5
  *               51 - Counter-Clockwise M5
- *
- */
+ **/
 void GcodeSuite::G35() {
   DEBUG_SECTION(log_G35, "G35", DEBUGGING(LEVELING));
 
@@ -83,7 +82,9 @@ void GcodeSuite::G35() {
     set_bed_leveling_enabled(false);
   #endif
 
-  TERN_(CNC_WORKSPACE_PLANES, workspace_plane = PLANE_XY);
+  #if ENABLED(CNC_WORKSPACE_PLANES)
+    workspace_plane = PLANE_XY;
+  #endif
 
   probe.use_probing_tool();
 

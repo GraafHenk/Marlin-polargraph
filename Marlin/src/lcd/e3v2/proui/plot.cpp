@@ -29,13 +29,10 @@
 
 #include "../../../inc/MarlinConfig.h"
 
-#if ENABLED(DWIN_LCD_PROUI)
-
-#include "dwin_defines.h"
-
-#if PROUI_TUNING_GRAPH
+#if ALL(DWIN_LCD_PROUI, PROUI_TUNING_GRAPH)
 
 #include "dwin.h"
+#include "../../../core/types.h"
 #include "../../marlinui.h"
 #include "plot.h"
 
@@ -78,5 +75,4 @@ void Plot::update(const_float_t value) {
   #endif
 }
 
-#endif // PROUI_TUNING_GRAPH
-#endif // DWIN_LCD_PROUI
+#endif // DWIN_LCD_PROUI && PROUI_TUNING_GRAPH
